@@ -1,37 +1,49 @@
-#!/usr/bin/python
+#
 # -*- coding: utf-8 -*-
 # Copyright 2019 Red Hat
-# GNU General Public License v3.0+ (see COPYING or
-# https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+
+# (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 """
 The vyos l3_interfaces fact class
 It is in this file the configuration is collected from the device
 for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
+from copy import deepcopy
 import ipaddress
 from ansible.module_utils.six import iteritems
 from re import findall, M
-from ansible.module_utils.network. \
-    vyos.facts.base import FactsBase
+from ansible.module_utils.network.common import utils
+from ansible.module_utils.network.vyos.argspec.l3_interfaces.l3_interfaces import L3_interfacesArgs
 
 
-class L3_interfacesFacts(FactsBase):
+class L3_interfacesFacts(object):
     """ The vyos l3_interfaces fact class
     """
 
-    def populate_facts(self, module, connection, data=None):
-        """ Populate the facts for l3_interfaces
+    def __init__(self, module, subspec='config', options='options'):
+        self._module = module
+        self.argument_spec = L3_interfacesArgs.argument_spec
+        spec = deepcopy(self.argument_spec)
+        if subspec:
+            if options:
+                facts_argument_spec = spec[subspec][options]
+            else:
+                facts_argument_spec = spec[subspec]
+        else:
+            facts_argument_spec = spec
 
-        :param module: the module instance
+        self.generated_spec = utils.generate_dict(facts_argument_spec)
+
+    def populate_facts(self, connection, ansible_facts, data=None):
+        """ Populate the facts for l3_interfaces
         :param connection: the device connection
+        :param ansible_facts: Facts dictionary
         :param data: previously collected conf
         :rtype: dictionary
         :returns: facts
         """
-        if module:  # just for linting purposes
-            pass
-        if connection:  # just for linting purposes
+        if connection:  # just for linting purposes, remove
             pass
 
         if not data:
@@ -51,12 +63,13 @@ class L3_interfacesFacts(FactsBase):
         facts = {}
         if objs:
             facts['l3_interfaces'] = objs
-        self.ansible_facts['ansible_network_resources'].update(facts)
-        return self.ansible_facts
+        ansible_facts['ansible_network_resources'].update(facts)
+        return ansible_facts
 
     def render_config(self, conf):
         """
-        Render config as dictionary structure and delete keys from spec for null values
+        Render config as dictionary structure and delete keys
+          from spec for null values
 
         :param spec: The facts tree, generated from the argspec
         :param conf: The configuration
@@ -68,7 +81,7 @@ class L3_interfacesFacts(FactsBase):
         config = self.parse_attribs(eth_conf)
         config['vifs'] = self.parse_vifs(vif_conf)
 
-        return self.generate_final_config(config)
+        return utils.remove_empties(config)
 
     def parse_vifs(self, conf):
         vif_names = findall(r'vif (\S+)', conf, M)
@@ -108,4 +121,4 @@ class L3_interfacesFacts(FactsBase):
             if value == []:
                 config[key] = None
 
-        return self.generate_final_config(config)
+        return utils.remove_empties(config)

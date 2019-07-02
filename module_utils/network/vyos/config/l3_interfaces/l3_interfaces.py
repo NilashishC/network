@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#
 # -*- coding: utf-8 -*-
 # Copyright 2019 Red Hat
 # GNU General Public License v3.0+
@@ -10,14 +10,10 @@ is compared to the provided configuration (as dict) and the command set
 necessary to bring the current configuration to it's desired end-state is
 created
 """
-
+from ansible.module_utils.network.common.cfg.base import ConfigBase
 from ansible.module_utils.network.common.utils import to_list
-
 from ansible.module_utils.network. \
     vyos.argspec.l3_interfaces.l3_interfaces import L3_interfacesArgs
-from ansible.module_utils.network. \
-    vyos. \
-    config.base import ConfigBase
 from ansible.module_utils.network. \
     vyos.facts.facts import Facts
 from ansible.module_utils.network. \
@@ -48,10 +44,7 @@ class L3_interfaces(ConfigBase, L3_interfacesArgs):
         :rtype: A dictionary
         :returns: The current configuration as a dictionary
         """
-        facts, _warnings = Facts().get_facts(self._module,
-                                             self._connection,
-                                             self.gather_subset,
-                                             self.gather_network_resources)
+        facts, _warnings = Facts(self._module).get_facts(self.gather_subset, self.gather_network_resources)
         l3_interfaces_facts = facts['ansible_network_resources'].get('l3_interfaces')
         if not l3_interfaces_facts:
             return []
