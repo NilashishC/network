@@ -51,7 +51,7 @@ class L3_interfacesFacts(object):
 
         # operate on a collection of resource x
         objs = []
-        interface_names = findall(r'set interfaces (?:ethernet|bonding) (\S+)', data, M)
+        interface_names = findall(r'set interfaces (?:ethernet|bonding|vti|vxlan) (\S+)', data, M)
         if interface_names:
             for interface in set(interface_names):
                 intf_regex = r' %s .+$' % interface

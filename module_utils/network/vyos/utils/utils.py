@@ -20,5 +20,9 @@ def get_interface_type(interface):
         return 'ethernet'
     elif interface.upper().startswith('BOND'):
         return 'bonding'
+    elif interface.upper().startswith('VXLAN'):
+        return 'vxlan'
+    elif interface.upper().startswith('VTI'):
+        return 'vti'
     else:
         return 'unknown'
