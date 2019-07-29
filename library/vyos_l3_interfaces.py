@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding:utf-8 -*-
+# -*- coding: utf-8 -*-
 # Copyright 2019 Red Hat
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
@@ -37,84 +37,85 @@ ANSIBLE_METADATA = {
 
 DOCUMENTATION = """
 ---
-module:vyos_l3_interfaces
-version_added:2.9
-short_description:Manages L3 interface attributes of VyOS network devices.
-description:This module manages the L3 interface attributes on VyOS network devices.
+module: vyos_l3_interfaces
+version_added: 2.9
+short_description: Manages L3 interface attributes of VyOS network devices.
+description: This module manages the L3 interface attributes on VyOS network devices.
 author:
    - Nilashish Chakraborty (@NilashishC)
    - Rohit Thakur (@rohitthakur2590)
 options:
   config:
-    description:The provided L3 interfaces configuration.
-    type:list
-    elements:dict
+    description:
+      - The provided L3 interfaces configuration.
+    type: list
+    elements: dict
     suboptions:
       name:
         description:
           - Full name of the interface,e.g. eth0, eth1.
-        type:str
-        required:True
+        type: str
+        required: True
       ipv4:
         description:
           - List of IPv4 addresses of the interface.
-        type:list
-        elements:dict
+        type: list
+        elements: dict
         suboptions:
           address:
             description:
               - IPv4 address of the interface.
-            type:str
+            type: str
       ipv6:
         description:
           - List of IPv6 addresses of the interface.
-        type:list
-        elements:dict
+        type: list
+        elements: dict
         suboptions:
           address:
             description:
               - IPv6 address of the interface.
-            type:str
+            type: str
       vifs:
         description:
           - Virtual sub-interfaces L3 configurations.
-        elements:dict
-        type:list
+        elements: dict
+        type: list
         suboptions:
           vlan_id:
             description:
               - Identifier for the virtual sub-interface.
-            type:str
+            type: str
           ipv4:
             description:
               - List of IPv4 addresses of the virtual interface.
-            type:list
-            elements:dict
+            type: list
+            elements: dict
             suboptions:
               address:
                 description:
                   - IPv4 address of the virtual interface.
-                type:str
+                type: str
           ipv6:
             description:
               - List of IPv6 addresses of the virual interface.
-            type:list
-            elements:dict
+            type: list
+            elements: dict
             suboptions:
               address:
                 description:
                   - IPv6 address of the virtual interface.
-                type:str
+                type: str
   state:
     description:
       - The state the configuration should be left in.
-    type:str
+    type: str
     choices:
     - merged
     - replaced
     - overridden
     - deleted
-    default:merged
+    default: merged
 
 """
 EXAMPLES = """
@@ -130,34 +131,34 @@ EXAMPLES = """
 # set interfaces ethernet eth3 hw-id '08:00:27:38:bc:3f'
 # set interfaces loopback lo
 #
-- name:Merge provided configuration with device configuration
+- name: Merge provided configuration with device configuration
   vyos_l3_interfaces:
     config:
-      - name:eth2
+      - name: eth2
         ipv4:
-          - address:192.0.2.10/28
-          - address:198.51.100.40/27
+          - address: 192.0.2.10/28
+          - address: 198.51.100.40/27
         ipv6:
-          - address:2001:db8:100::2/32
-          - address:2001:db8:400::10/32
+          - address: 2001:db8:100::2/32
+          - address: 2001:db8:400::10/32
 
-      - name:eth3
+      - name: eth3
         ipv4:
-          - address:203.0.113.65/26
+          - address: 203.0.113.65/26
         vifs:
-          - vlan_id:101
+          - vlan_id: 101
             ipv4:
-              - address:192.0.2.71/28
-              - address:198.51.100.131/25
-          - vlan_id:102
+              - address: 192.0.2.71/28
+              - address: 198.51.100.131/25
+          - vlan_id: 102
             ipv6:
-              - address:2001:db8:1000::5/38
-      - name:bond0
+              - address: 2001:db8:1000::5/38
+      - name: bond0
         ipv4:
-           - address:172.0.0.11/26
+           - address: 192.0.2.11/26
         ipv6:
-           - address:2001:db8:1000::5/38
-           - address:2001:db8:1400::3/38
+           - address: 2001:db8:1000::5/38
+           - address: 2001:db8:1400::3/38
     state:merged
 #
 #
@@ -165,24 +166,24 @@ EXAMPLES = """
 # Module Execution Results
 # ------------------------
 #
-# "before":[
+# "before": [
 #        {
-#            "name":"eth3"
+#            "name": "eth3"
 #       },
 #        {
-#            "name":"eth2"
+#            "name": "eth2"
 #        },
 #        {
-#            "ipv4":[
+#            "ipv4": [
 #                {
-#                    "address":"dhcp"
+#                    "address": "dhcp"
 #                }
 #            ],
-#            "name":"eth0"
+#            "name": "eth0"
 #        }
 #    ]
 #
-# "commands":[
+# "commands": [
 #        "set interfaces ethernet eth2 address '2001:db8:100::2/32'",
 #        "set interfaces ethernet eth2 address '2001:db8:400::10/32'",
 #        "set interfaces ethernet eth2 address '192.0.2.10/28'",
@@ -192,81 +193,81 @@ EXAMPLES = """
 #        "set interfaces ethernet eth3 vif 101 address '198.51.100.131/25'",
 #        "set interfaces ethernet eth3 vif 102 address '2001:db8:1000::5/38'",
 #        "set interfaces ethernet eth3 vif 102 address '2001:db8:1400::3/38'",
-#        "set interfaces bonding bond0 address '172.0.0.11/26'",
+#        "set interfaces bonding bond0 address '192.0.2.11/26'",
 #        "set interfaces bonding bond0 address '2001:db8:1000::5/38'"
 #    ]
-# "after":[
+# "after": [
 #        {
-#            "ipv4":[
+#            "ipv4": [
 #                {
-#                    "address":"203.0.113.65/26"
+#                    "address": "203.0.113.65/26"
 #                }
 #            ],
-#            "name":"eth3",
-#            "vifs":[
+#            "name": "eth3",
+#            "vifs": [
 #                {
-#                    "ipv6":[
+#                    "ipv6": [
 #                        {
-#                            "address":"2001:db8:1000::5/38"
+#                            "address": "2001:db8:1000::5/38"
 #                        },
 #                        {
-#                            "address":"2001:db8:1400::3/38"
+#                            "address": "2001:db8:1400::3/38"
 #                        }
 #                    ],
-#                    "vlan_id":"102"
+#                    "vlan_id": "102"
 #                },
 #                {
-#                    "ipv4":[
+#                    "ipv4": [
 #                        {
-#                            "address":"192.0.2.71/28"
+#                            "address": "192.0.2.71/28"
 #                        },
 #                        {
-#                            "address":"198.51.100.131/25"
+#                            "address": "198.51.100.131/25"
 #                       }
 #                    ],
-#                    "vlan_id":"101"
+#                    "vlan_id": "101"
 #                }
 #            ]
 #        },
 #        {
-#            "ipv4":[
+#            "ipv4": [
 #                {
-#                    "address":"172.0.0.11/26"
+#                    "address": "192.0.2.11/26"
 #                }
 #            ],
-#            "ipv6":[
+#            "ipv6": [
 #                {
-#                    "address":"2001:db8:1000::5/38"
+#                    "address": "2001:db8:1000::5/38"
 #                }
 #            ],
-#            "name":"bond0"
+#            "name": "bond0"
 #        },
 #        {
-#            "ipv4":[
+#            "ipv4": [
 #                {
-#                    "address":"192.0.2.10/28"
+#                    "address": "192.0.2.10/28"
 #               },
 #                {
-#                    "address":"198.51.100.40/27"
+#                    "address": "198.51.100.40/27"
 #                }
 #            ],
-#            "ipv6":[
+#            "ipv6": [
 #                {
-#                    "address":"2001:db8:100::2/32"
+#                    "address": "2001:db8:100::2/32"
 #                },
 #                {
-#                    "address":"2001:db8:400::10/32"
+#                    "address": "2001:db8:400::10/32"
 #                }
 #            ],
-#            "name":"eth2"
+#            "name": "eth2"
 #        },
 #        {
-#            "ipv4":[
+#            "ipv4": [
 #                {
-#                    "address":"dhcp"
+#                    "address": "dhcp"
 #                }
 #            ],
-#            "name":"eth0"
+#            "name": "eth0"
 #        }
 #    ]
 #
@@ -274,7 +275,7 @@ EXAMPLES = """
 # -------------
 #
 # vyos@vyos:~$ show configuration commands | grep interfaces
-# set interfaces bonding bond0 address '172.0.0.11/26'
+# set interfaces bonding bond0 address '192.0.2.11/26'
 # set interfaces bonding bond0 address '2001:db8:1000::5/38'
 # set interfaces ethernet eth0 address 'dhcp'
 # set interfaces ethernet eth0 hw-id '08:00:27:e9:f6:02'
@@ -299,7 +300,7 @@ EXAMPLES = """
 #
 # vyos@vyos:~$ show configuration commands | grep inter
 # set interfaces bonding bond0 address '2001:db8:1000::5/38'
-# set interfaces bonding bond0 address '172.0.0.11/26'
+# set interfaces bonding bond0 address '192.0.2.11/26'
 # set interfaces ethernet eth0 address 'dhcp'
 # set interfaces ethernet eth0 hw-id '08:00:27:e9:f6:02'
 # set interfaces ethernet eth2 address '2001:db8:100::2/32'
@@ -315,17 +316,17 @@ EXAMPLES = """
 # set interfaces ethernet eth3 vif 102 address '2001:db8:1400::3/38'
 # set interfaces loopback lo
 #
-- name:Replace device configurations of listed interfaces with provided configurations
+- name: Replace device configurations of listed interfaces with provided configurations
   vyos_l3_interfaces:
     config:
-      - name:eth2
+      - name: eth2
         ipv4:
-      - address:192.0.0.22/24
+      - address: 192.0.0.22/24
 
-      - name:bond0
+      - name: bond0
         ipv4:
-      - address:192.0.0.22/24
-    state:replaced
+      - address: 192.0.0.22/24
+    state: replaced
 #
 #
 # ------------------------
@@ -333,81 +334,81 @@ EXAMPLES = """
 # ------------------------
 #
 #
-# "before":[
+# "before": [
 #        {
-#            "ipv4":[
+#            "ipv4": [
 #                {
-#                    "address":"203.0.113.65/26"
+#                    "address": "203.0.113.65/26"
 #                }
 #            ],
-#            "name":"eth3",
-#            "vifs":[
+#            "name": "eth3",
+#            "vifs": [
 #                {
-#                    "ipv6":[
+#                    "ipv6": [
 #                        {
-#                            "address":"2001:db8:1000::5/38"
+#                            "address": "2001:db8:1000::5/38"
 #                        },
 #                        {
-#                            "address":"2001:db8:1400::3/38"
+#                            "address": "2001:db8:1400::3/38"
 #                        }
 #                    ],
-#                    "vlan_id":"102"
+#                    "vlan_id": "102"
 #                },
 #                {
-#                    "ipv4":[
+#                    "ipv4": [
 #                        {
-#                            "address":"192.0.2.71/28"
+#                            "address": "192.0.2.71/28"
 #                        },
 #                        {
-#                            "address":"198.51.100.131/25"
+#                            "address": "198.51.100.131/25"
 #                        }
 #                    ],
-#                    "vlan_id":"101"
+#                    "vlan_id": "101"
 #                }
 #            ]
 #        },
 #        {
-#            "ipv4":[
+#            "ipv4": [
 #                {
-#                    "address":"172.0.0.11/26"
+#                    "address": "192.0.2.11/26"
 #                }
 #            ],
-#            "ipv6":[
+#            "ipv6": [
 #                {
-#                    "address":"2001:db8:1000::5/38"
+#                    "address": "2001:db8:1000::5/38"
 #                }
 #            ],
-#            "name":"bond0"
+#            "name": "bond0"
 #        },
 #        {
-#            "ipv4":[
+#            "ipv4": [
 #                {
-#                    "address":"192.0.2.10/28"
+#                    "address": "192.0.2.10/28"
 #                },
 #                {
-#                    "address":"198.51.100.40/27"
+#                    "address": "198.51.100.40/27"
 #                }
 #            ],
-#            "ipv6":[
+#            "ipv6": [
 #                {
-#                    "address":"2001:db8:100::2/32"
+#                    "address": "2001:db8:100::2/32"
 #                },
 #                {
-#                    "address":"2001:db8:400::10/32"
+#                    "address": "2001:db8:400::10/32"
 #                }
 #            ],
-#            "name":"eth2"
+#            "name": "eth2"
 #        },
 #        {
-#            "ipv4":[
+#            "ipv4": [
 #                {
-#                    "address":"dhcp"
+#                    "address": "dhcp"
 #                }
 #            ],
-#            "name":"eth0"
+#            "name": "eth0"
 #        }
 #    ]
-# "commands":[
+# "commands": [
 #        "set interfaces ethernet eth2 address '2001:db8:100::2/32'",
 #        "set interfaces ethernet eth2 address '2001:db8:400::10/32'",
 #        "set interfaces ethernet eth2 address '192.0.2.10/28'",
@@ -418,80 +419,80 @@ EXAMPLES = """
 #        "set interfaces ethernet eth3 vif 102 address '2001:db8:1000::5/38'",
 #        "set interfaces ethernet eth3 vif 102 address '2001:db8:1400::3/38'",
 #        "set interfaces bonding bond0 address '2001:db8:1000::5/38'",
-#        "set interfaces bonding bond0 address '172.0.0.11/26'"
+#        "set interfaces bonding bond0 address '192.0.2.11/26'"
 #    ]
-# "after":[
+# "after": [
 #        {
-#            "ipv4":[
+#            "ipv4": [
 #                {
-#                    "address":"203.0.113.65/26"
+#                    "address": "203.0.113.65/26"
 #                }
 #            ],
-#            "name":"eth3",
-#            "vifs":[
+#            "name": "eth3",
+#            "vifs": [
 #                {
-#                    "ipv6":[
+#                    "ipv6": [
 #                        {
-#                            "address":"2001:db8:1000::5/38"
+#                            "address": "2001:db8:1000::5/38"
 #                        },
 #                        {
-#                            "address":"2001:db8:1400::3/38"
+#                            "address": "2001:db8:1400::3/38"
 #                        }
 #                    ],
-#                    "vlan_id":"102"
+#                    "vlan_id": "102"
 #                },
 #                {
-#                    "ipv4":[
+#                    "ipv4": [
 #                        {
-#                            "address":"192.0.2.71/28"
+#                            "address": "192.0.2.71/28"
 #                        },
 #                        {
-#                            "address":"198.51.100.131/25"
+#                            "address": "198.51.100.131/25"
 #                        }
 #                    ],
-#                    "vlan_id":"101"
+#                    "vlan_id": "101"
 #                }
 #            ]
 #        },
 #        {
-#            "ipv4":[
+#            "ipv4": [
 #                {
-#                    "address":"172.0.0.11/26"
+#                    "address": "192.0.2.11/26"
 #                }
 #            ],
-#            "ipv6":[
+#            "ipv6": [
 #                {
-#                    "address":"2001:db8:1000::5/38"
+#                    "address": "2001:db8:1000::5/38"
 #                }
 #            ],
-#            "name":"bond0"
+#            "name": "bond0"
 #        },
 #        {
-#            "ipv4":[
+#            "ipv4": [
 #               {
-#                    "address":"192.0.2.10/28"
+#                    "address": "192.0.2.10/28"
 #                },
 #                {
-#                    "address":"198.51.100.40/27"
+#                    "address": "198.51.100.40/27"
 #                }
 #            ],
-#            "ipv6":[
+#            "ipv6": [
 #                {
-#                    "address":"2001:db8:100::2/32"
+#                    "address": "2001:db8:100::2/32"
 #                },
 #                {
-#                    "address":"2001:db8:400::10/32"
+#                    "address": "2001:db8:400::10/32"
 #                }
 #            ],
-#            "name":"eth2"
+#            "name": "eth2"
 #        },
 #        {
-#            "ipv4":[
+#            "ipv4": [
 #                {
-#                    "address":"dhcp"
+#                    "address": "dhcp"
 #                }
 #            ],
-#            "name":"eth0"
+#            "name": "eth0"
 #        }
 #    ]
 #
@@ -533,122 +534,122 @@ EXAMPLES = """
 # set interfaces ethernet eth3 vif 102 address '2001:db8:1400::3/38'
 # set interfaces loopback lo
 #
- - name:Overrides all device configuration with provided configuration
+ - name: Overrides all device configuration with provided configuration
   vyos_l3_interfaces:
     config:
-      - name:eth0
+      - name: eth0
         ipv4:
-          - address:dhcp
+          - address: dhcp
         ipv6:
-          - address:dhcpv6
-    state:overridden
+          - address: dhcpv6
+    state: overridden
 #
 #
 # ------------------------
 # Module Execution Results
 # ------------------------
 #
-# "before":[
+# "before": [
 #        {
-#            "ipv4":[
+#            "ipv4": [
 #                {
-#                    "address":"203.0.113.65/26"
+#                    "address": "203.0.113.65/26"
 #                }
 #            ],
-#            "name":"eth3",
-#            "vifs":[
+#            "name": "eth3",
+#            "vifs": [
 #                {
-#                    "ipv6":[
+#                    "ipv6": [
 #                        {
-#                            "address":"2001:db8:1000::5/38"
+#                            "address": "2001:db8:1000::5/38"
 #                        },
 #                        {
-#                            "address":"2001:db8:1400::3/38"
+#                            "address": "2001:db8:1400::3/38"
 #                        }
 #                    ],
-#                    "vlan_id":"102"
+#                    "vlan_id": "102"
 #                },
 #                {
-#                    "ipv4":[
+#                    "ipv4": [
 #                        {
-#                            "address":"192.0.2.71/28"
+#                            "address": "192.0.2.71/28"
 #                        },
 #                        {
-#                            "address":"198.51.100.131/25"
+#                            "address": "198.51.100.131/25"
 #                        }
 #                    ],
-#                    "vlan_id":"101"
+#                    "vlan_id": "101"
 #                }
 #            ]
 #        },
 #        {
-#            "ipv4":[
+#            "ipv4": [
 #                {
-#                    "address":"192.0.0.11/24"
+#                    "address": "192.0.0.11/24"
 #                }
 #            ],
-#            "name":"bond0"
+#            "name": "bond0"
 #        },
 #        {
-#            "ipv4":[
+#            "ipv4": [
 #                {
-#                    "address":"192.0.0.22/24"
+#                    "address": "192.0.0.22/24"
 #                }
 #            ],
-#            "name":"eth2"
+#            "name": "eth2"
 #        },
 #        {
-#            "ipv4":[
+#            "ipv4": [
 #                {
-#                    "address":"dhcp"
+#                    "address": "dhcp"
 #                }
 #
 #            ],
-#            "ipv6":[
+#            "ipv6": [
 #                {
-#                    "address":"dhcpv6"
+#                    "address": "dhcpv6"
 #                }
 #            ],
-#            "name":"eth0"
+#            "name": "eth0"
 #        }
 #    ]
-# "commands":[
+# "commands": [
 #        "delete interfaces ethernet eth3 address",
 #        "delete interfaces ethernet eth3 vif 102 address",
 #        "delete interfaces ethernet eth3 vif 101 address",
 #        "delete interfaces bonding bond0 address",
 #        "delete interfaces ethernet eth2 address"
 #    ]
-# "after":[
+# "after": [
 #        {
-#            "name":"eth3",
-#            "vifs":[
+#            "name": "eth3",
+#            "vifs": [
 #                {
-#                    "vlan_id":"102"
+#                    "vlan_id": "102"
 #                },
 #                {
-#                    "vlan_id":"101"
+#                    "vlan_id": "101"
 #                }
 #            ]
 #        },
 #        {
-#            "name":"bond0"
+#            "name": "bond0"
 #        },
 #        {
-#            "name":"eth2"
+#            "name": "eth2"
 #        },
 #        {
-#            "ipv4":[
+#            "ipv4": [
 #                {
-#                    "address":"dhcp"
+#                    "address": "dhcp"
 #                }
 #            ],
-#            "ipv6":[
+#            "ipv6": [
 #                {
-#                    "address":"dhcpv6"
+#                    "address": "dhcpv6"
 #                }
 #            ],
-#            "name":"eth0"
+#            "name": "eth0"
 #        }
 #
 #    ]
@@ -673,7 +674,7 @@ EXAMPLES = """
 # Before state
 # -------------
 # vyos@vyos:~$ show configuration commands | grep interfaces
-# set interfaces bonding bond0 address '172.0.0.11/26'
+# set interfaces bonding bond0 address '192.0.2.11/26'
 # set interfaces bonding bond0 address '2001:db8:1000::5/38'
 # set interfaces ethernet eth0 address 'dhcp'
 # set interfaces ethernet eth0 hw-id '08:00:27:e9:f6:02'
@@ -691,95 +692,95 @@ EXAMPLES = """
 # set interfaces loopback lo3 vif 102 address '2001:db8:1400::3/38'
 # set interfaces loopback lo
 #
-- name:Delete L3 attributes of given interfaces (Note: This won't delete the interface itself)
+- name: Delete L3 attributes of given interfaces (Note: This won't delete the interface itself)
   vyos_l3_interfaces:
     config:
-      - name:eth2
-      - name:eth3
-      - name:bond0
-    state:deleted
+      - name: eth2
+      - name: eth3
+      - name: bond0
+    state: deleted
 #
 #
 # ------------------------
 # Module Execution Results
 # ------------------------
 #
-# "before":[
+# "before": [
 #        {
-#            "ipv4":[
+#            "ipv4": [
 #                {
-#                    "address":"203.0.113.65/26"
+#                    "address": "203.0.113.65/26"
 #                }
 #            ],
-#            "name":"eth3",
-#            "vifs":[
+#            "name": "eth3",
+#            "vifs": [
 #                {
-#                    "ipv6":[
+#                    "ipv6": [
 #                        {
-#                            "address":"2001:db8:1000::5/38"
+#                            "address": "2001:db8:1000::5/38"
 #                        },
 #                        {
-#                            "address":"2001:db8:1400::3/38"
+#                            "address": "2001:db8:1400::3/38"
 #                        }
 #                    ],
-#                    "vlan_id":"102"
+#                    "vlan_id": "102"
 #                },
 #                {
-#                    "ipv4":[
+#                    "ipv4": [
 #                        {
-#                            "address":"192.0.2.71/28"
+#                            "address": "192.0.2.71/28"
 #                        },
 #                        {
-#                            "address":"198.51.100.131/25"
+#                            "address": "198.51.100.131/25"
 #                        }
 #                    ],
-#                    "vlan_id":"101"
+#                    "vlan_id": "101"
 #                }
 #            ]
 #        },
 #        {
-#            "ipv4":[
+#            "ipv4": [
 #                {
-#                    "address":"172.0.0.11/26"
+#                    "address": "192.0.2.11/26"
 #                }
 #            ],
-#            "ipv6":[
+#            "ipv6": [
 #                {
-#                    "address":"2001:db8:1000::5/38"
+#                    "address": "2001:db8:1000::5/38"
 #                }
 #            ],
-#            "name":"bond0"
+#            "name": "bond0"
 #        },
 #        {
-#            "ipv4":[
+#            "ipv4": [
 #                {
-#                    "address":"192.0.2.10/28"
+#                    "address": "192.0.2.10/28"
 #                },
 #                {
-#                   "address":"198.51.100.40/27"
+#                   "address": "198.51.100.40/27"
 #                }
 #            ],
-#            "ipv6":[
+#            "ipv6": [
 #                {
-#                    "address":"2001:db8:100::2/32"
+#                    "address": "2001:db8:100::2/32"
 #                },
 #                {
-#                    "address":"2001:db8:400::10/32"
+#                    "address": "2001:db8:400::10/32"
 #                }
 #            ],
-#            "name":"eth2"
+#            "name": "eth2"
 #        },
 #        {
-#            "ipv4":[
+#            "ipv4": [
 #                {
-#                    "address":"dhcp"
+#                    "address": "dhcp"
 #                }
 #            ],
-#            "name":"eth0"
+#            "name": "eth0"
 #        }
 #    ]
 #
-#  "commands":[
+#  "commands": [
 #        "delete interfaces ethernet eth2 address",
 #        "delete interfaces ethernet eth3 address",
 #        "delete interfaces ethernet eth3 vif 102 address",
@@ -787,31 +788,31 @@ EXAMPLES = """
 #        "delete interfaces bonding bond0 address"
 #    ]
 #
-# "after":[
+# "after": [
 #        {
-#            "name":"eth3",
-#            "vifs":[
+#            "name": "eth3",
+#            "vifs": [
 #                {
-#                    "vlan_id":"102"
+#                    "vlan_id": "102"
 #                },
 #                {
-#                    "vlan_id":"101"
+#                    "vlan_id": "101"
 #                }
 #            ]
 #        },
 #        {
-#            "name":"bond0"
+#            "name": "bond0"
 #        },
 #        {
-#            "name":"eth2"
+#            "name": "eth2"
 #        },
 #        {
-#            "ipv4":[
+#            "ipv4": [
 #                {
-#                    "address":"dhcp"
+#                    "address": "dhcp"
 #                }
 #            ],
-#            "name":"eth0"
+#            "name": "eth0"
 #        }
 #    ]
 #
@@ -831,22 +832,24 @@ EXAMPLES = """
 """
 RETURN = """
 before:
-  description:The configuration prior to the model invocation.
-  returned:always
-  sample:>
+  description: The configuration prior to the model invocation.
+  returned: always
+  sample: >
     The configuration returned will always be in the same format
      of the parameters above.
 after:
-  description:The resulting configuration model invocation.
-  returned:when changed
-  sample:>
+  description: The resulting configuration model invocation.
+  returned: when changed
+  sample: >
     The configuration returned will always be in the same format
      of the parameters above.
 commands:
-  description:The set of commands pushed to the remote device.
-  returned:always
-  type:list
-  sample:['command 1', 'command 2', 'command 3']
+  description: The set of commands pushed to the remote device.
+  returned: always
+  type: list
+  sample:
+    - 'set interfaces ethernet eth3 address 203.0.113.65/26'
+    - 'set interfaces ethernet eth2 address dhcpv6'
 """
 
 
@@ -859,7 +862,7 @@ def main():
     """
     Main entry point for module execution
 
-    :returns:the result form module invocation
+    :returns: the result form module invocation
     """
     module = AnsibleModule(argument_spec=L3_interfacesArgs.argument_spec,
                            supports_check_mode=True)
