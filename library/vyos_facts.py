@@ -27,7 +27,10 @@ description:
     base network fact keys with U(ansible_net_<fact>).  The facts
     module will always collect a base set of facts from the device
     and can enable or disable collection of additional facts.
-author: [u'Nilashish Chakraborty (@NilashishC)', u'Rohit Thakur (@rohitthakur2590)']
+author:
+   - Nathaniel Case (@Qalthos)
+   - Nilashish Chakraborty (@NilashishC)
+   - Rohit Thakur (@rohitthakur2590)
 options:
   gather_subset:
     description:
